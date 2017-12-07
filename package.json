@@ -1,0 +1,53 @@
+{
+  "name": "exercise",
+  "version": "1.0.0",
+  "description": "练习nodejs",
+  "main": "index.js",
+  "scripts": {
+    "run": "node server.js",
+    "build": "webpack --progress --profile --colors",
+    "rbuild": "npm run clean; NODE_ENV=production webpack --progress --profile --colors",
+    "watch": "webpack --watch --progress --profile --colors",
+    "clean": "rm -rf ./static/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/machao669/exercise.git"
+  },
+  "author": "Gary",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/machao669/exercise/issues"
+  },
+  "homepage": "https://github.com/machao669/exercise#readme",
+  "devDependencies": {
+    "assets-webpack-plugin": "^3.4.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
+    "ignore-styles": "^5.0.1",
+    "image-webpack-loader": "^3.4.2",
+    "node-sass": "^4.5.2",
+    "postcss": "^6.0.13",
+    "postcss-loader": "^2.0.8",
+    "react": "^16.0.0",
+    "react-addons-test-utils": "^15.5.1",
+    "react-dom": "^16.0.0",
+    "react-router-dom": "^4.2.2",
+    "resolve-url-loader": "^2.1.1",
+    "sass-loader": "^6.0.5",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.8.1",
+    "webpack-chunk-hash": "^0.5.0",
+    "webpack-notifier": "^1.5.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
