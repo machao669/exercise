@@ -47,6 +47,19 @@ function Local() {
         }
     }
 
+    // 随机生成干扰行
+    function generataBottomLine(lineNumber) {
+        var lines = [];
+        for(var i =0; i<lineNumber; i++) {
+            var line=[];
+            for(var j=0;j<10;j++) {
+                line.push(Math.ceil(Math.random() * 2) - 1);
+            }
+            lines.push(line);
+        }
+        return lines;
+    }
+
     // 计算时间
     function timeFunc() {
         timeCount += 1;
@@ -54,6 +67,9 @@ function Local() {
             time += 1;
             timeCount = 0;
             game.setTime(time);
+            if (time % 10 === 0) {
+                game.addTailLines(generataBottomLine(1));
+            }
         }
     }
 

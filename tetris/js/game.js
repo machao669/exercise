@@ -229,6 +229,21 @@ function Game() {
         resultDiv.innerHTML = desc;
     }
 
+    // 底部增加行
+    function addTailLines(lines) {
+        for(i = 0; i<gameData.length - lines.length; i++) {
+            gameData[i] = gameData[i + lines.length];
+        }
+        for(var i=0; i<lines.length; i++) {
+            gameData[gameData.length - lines.length + i] = lines[i];
+        }
+        cur.origin.x -= lines.length;
+        if (cur.origin.x < 0) {
+            cur.origin.x = 0;
+        }
+        refreshDivs(gameData, gameDivs);
+    }
+
     //使用下一个方块
     function performNext(type, dir) {
         cur = next;
@@ -291,4 +306,5 @@ function Game() {
     this.setTime = setTime;
     this.addScore = addScore;
     this.gameOver = gameOver;
+    this.addTailLines = addTailLines;
 }
