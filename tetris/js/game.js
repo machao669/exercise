@@ -301,8 +301,8 @@ export class Game {
                 break; 
             default:   
         }
-        score += s;
-        this.scoreDiv.innerHTML = score;
+        this.score += s;
+        this.scoreDiv.innerHTML = this.score;
     }
 
     fall() {

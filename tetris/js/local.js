@@ -2,32 +2,55 @@ import { Game } from './game.js';
 
 export class Local {
 
-    constructor(doms) {
+    constructor(socket) {
         // 游戏核心
-        this.game = new Game(doms, this.generateType(), this.generateDir());
+        this.game = null;
         //时间间隔
-        this.INTERVAL = 200;
+        this.INTERVAL = 300;
         //定时器
         this.timer = null;
         //时间数
         this.timeCount = 0;
         this.time = 0;
+        this.socket = socket;
+        socket.on("start", () => {
+            this.start();
+            document.getElementById('wait').innerHTML = "";
+        })
+        socket.on("lose", () => {
+            this.game.gameOver(true);
+        })
+    }
+
+    get doms() {
+        return {
+            gameDiv: document.getElementById('local-game'),
+            nextDiv: document.getElementById('local-next'),
+            timeDiv: document.getElementById('local-time'),
+            scoreDiv: document.getElementById('local-score'),
+            resultDiv: document.getElementById('local-result'),
+        }
     }
 
     //绑定按钮事件
     bindKeyEvent() {
         const game = this.game;
-        document.onkeydown = function(e) {
+        document.onkeydown = (e) => {
             if (e.keyCode == 38) { // up
                 game.rotate();
+                this.socket.emit("rotate");
             } else if (e.keyCode == 39) { //right
                 game.right();
+                this.socket.emit("right");
             } else if (e.keyCode == 40) { //down
                 game.down();
+                this.socket.emit("down");
             } else if (e.keyCode == 37) { //left
                 game.left();
+                this.socket.emit("left");
             } else if (e.keyCode == 32) { // space
                 game.fall();
+                this.socket.emit("fall");
             }
         }
     }
@@ -37,17 +60,23 @@ export class Local {
         this.timeFunc();
         if (!game.down()) {
             game.fixed();
+            this.socket.emit("fixed");
             const line = game.checkClear();
             if (line) {
                 game.addScore(line);
+                this.socket.emit("line", line);
             }
             const gameOver = game.checkGameOver();
             if (gameOver) {
                 stop();
                 game.gameOver(false);
+                document.getElementById('remote-result').innerHTML = "你赢了";
+                this.socket.emit('lose');
             } else {
-                game.performNext(this.generateType(), this.generateDir());
+                this.performNext();
             }
+        } else {
+            this.socket.emit("down");
         }
     }
 
@@ -71,9 +100,7 @@ export class Local {
             this.time += 1;
             this.timeCount = 0;
             this.game.setTime(this.time);
-            if (this.time % 10 === 0) {
-                this.game.addTailLines(this.generataBottomLine(1));
-            }
+            this.socket.emit('time', this.time);
         }
     }
 
@@ -87,9 +114,21 @@ export class Local {
         return Math.floor(Math.random() * 4)
     }
 
-    start(doms){
+    performNext() {
+        const nextType = this.generateType();
+        const nextDir = this.generateDir();
+        this.game.performNext(nextType, nextDir);
+        this.socket.emit("next", { type: nextType, dir: nextDir });
+    }
+
+    start(){
+        const initType = this.generateType();
+        const initDir = this.generateDir();
+        this.game = new Game(this.doms, initType, initDir);
+        this.socket.emit("init", { type: initType, dir: initDir });
+
         this.bindKeyEvent();
-        this.game.performNext(this.generateType(), this.generateDir());
+        this.performNext();
         this.timer = setInterval(this.move.bind(this), this.INTERVAL);
     }
 
