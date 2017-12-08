@@ -1,4 +1,6 @@
-function Game() {
+import { SquareFactory } from './squareFactory';
+
+export function Game() {
     // dom元素
     var gameDiv;
     var nextDiv;
@@ -248,7 +250,7 @@ function Game() {
     function performNext(type, dir) {
         cur = next;
         setData();
-        next = SquareFactory.prototype.make(type, dir);
+        next = SquareFactory.make(type, dir);
         refreshDivs(gameData, gameDivs);
         refreshDivs(next.data, nextDivs);
     }
@@ -286,7 +288,7 @@ function Game() {
         timeDiv = doms.timeDiv;
         scoreDiv = doms.scoreDiv;
         resultDiv = doms.resultDiv;
-        next = SquareFactory.prototype.make(type, dir);
+        next = SquareFactory.make(type, dir);
         initDivs(gameDiv, gameData, gameDivs);
         initDivs(nextDiv, next.data, nextDivs);
         refreshDivs(next.data, nextDivs);

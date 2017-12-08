@@ -1,0 +1,76 @@
+extends: airbnb
+env:
+    browser: true
+    es6: true
+    mocha: true
+rules:
+    indent:
+        - 2
+        - 4
+        - SwitchCase: 1
+    no-else-return: 0
+    quotes: 0
+    no-alert: 0
+    jsx-quotes: 0
+    new-cap:
+        - 2 
+        - capIsNewExceptions: 
+            - MathJax.Hub.Queue
+            - KindEditor
+            - Immutable.Range
+            - Immutable.Repeat
+            - Immutable.Map
+            - Immutable.List
+            - Immutable.Seq
+            - Immutable.Record
+            - Deferred
+            - MathJax.Hub.Register.MessageHook
+    no-console: 0
+    arrow-body-style: 0
+    prefer-arrow-callback: 0
+    func-names: 0
+    no-use-before-define: 0
+    no-underscore-dangle: 0
+    no-mixed-operators:
+        - 2
+        - allowSamePrecedence: true
+    no-plusplus: 0
+    class-methods-use-this: 0
+    no-continue: 0
+    comma-dangle:
+        - 2
+        - arrays: always-multiline
+          objects: always-multiline
+          imports: always-multiline
+          exports: always-multiline
+          fucntions: ignore
+
+    react/prop-types: 0
+    react/jsx-no-bind: 0
+    react/jsx-indent:
+        - 2
+        - 4
+    react/jsx-indent-props:
+        - 2
+        - 4
+    react/no-multi-comp: 0
+    react/jsx-no-target-blank: 0
+    react/no-danger: 0
+    react/jsx-filename-extension: 0
+
+    import/extensions:
+        - 2
+        - never
+        - scss: always
+          css: always
+          png: always
+          jpg: always
+    import/no-named-as-default: 0
+    import/no-extraneous-dependencies: 0
+    import/no-unresolved: 0
+    import/prefer-default-export: 0
+
+    jsx-a11y/img-has-alt: 0
+    jsx-a11y/href-no-hash: 0
+    jsx-a11y/no-static-element-interactions: 0
+    jsx-a11y/label-has-for: 0
