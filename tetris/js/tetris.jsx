@@ -15,8 +15,8 @@ export default class TetrisPage extends Component {
             scoreDiv: this.scoreDiv,
             resultDiv: this.resultDiv,
         };
-        const local = new Local();
-        local.start(doms);
+        const local = new Local(doms);
+        local.start();
     }
 
     render() {

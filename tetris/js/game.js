@@ -1,60 +1,68 @@
 import { SquareFactory } from './squareFactory';
 
-export function Game() {
-    // dom元素
-    var gameDiv;
-    var nextDiv;
-    var timeDiv;
-    var scoreDiv;
-    var resultDiv;
+export class Game {
 
-    // 得分
-    var score = 0;
+    constructor(doms, type, dir) {
+        // dom元素
+        this.gameDiv = doms.gameDiv;;
+        this.nextDiv = doms.nextDiv;
+        this.timeDiv = doms.timeDiv;
+        this.scoreDiv = doms.scoreDiv;
+        this.resultDiv = doms.resultDiv;
+
+        //方块
+        this.cur = null;
+        this.next = SquareFactory.make(type, dir);
+
+        // 得分
+        this.score = 0;
+
+         // 游戏矩阵
+        this.nextData = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0], 
+        ];
+        this.gameData = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+
+        //divs
+        this.nextDivs = [];
+        this.gameDivs = [];
+
+        this.initDivs(this.gameDiv, this.gameData, this.gameDivs);
+        this.initDivs(this.nextDiv, this.next.data, this.nextDivs);
+        this.refreshNextDivs()
+        this.isValidFun = this.isValid.bind(this);
+    }
     
-    // 游戏矩阵
-    var nextData = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0], 
-    ];
-    var gameData = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ];
-
-    //方块
-    var cur;
-    var next;
-
-    //divs
-    var nextDivs = [];
-    var gameDivs = [];
-
     //init function
-    function initDivs(container, data, divs) {
-        for(var i = 0; i < data.length; i ++) {
-            var div = [];
-            for (var j = 0; j < data[0].length; j++) {
-                var newNode = document.createElement('div');
+    initDivs(container, data, divs) {
+        for(let i = 0; i < data.length; i ++) {
+            const div = [];
+            for (let j = 0; j < data[0].length; j++) {
+                const newNode = document.createElement('div');
                 newNode.className = 'none';
                 newNode.style.top = (i * 20) + 'px';
                 newNode.style.left = (j * 20) + 'px';
@@ -65,10 +73,18 @@ export function Game() {
         }
     }
 
+    refreshNextDivs() {
+        this.refreshDivs(this.next.data, this.nextDivs);
+    }
+
+    refreshContentDivs() {
+        this.refreshDivs(this.gameData, this.gameDivs);
+    }
+
     //refresh 
-    function refreshDivs(data, divs) {
-        for(var i=0; i<data.length; i++) {
-            for(var j=0; j<data[0].length; j++){
+    refreshDivs(data, divs) {
+        for(let i = 0; i < data.length; i++) {
+            for(let j = 0; j < data[0].length; j++){
                 if(data[i][j] == 0) {
                     divs[i][j].className = 'none';
                 }else if(data[i][j] == 1) {
@@ -81,7 +97,8 @@ export function Game() {
     }
 
     //检测点合法
-    function check(pos, x, y) {
+    check(pos, x, y) {
+        const gameData = this.gameData;
         if (pos.x + x < 0) {
             return false;
         } else if(pos.x + x >= gameData.length) {
@@ -97,10 +114,10 @@ export function Game() {
     }
 
     //判断数据是否合法
-    function isValid(pos, data) {
-        for(var i=0; i < data.length; i++){
-            for(var j=0; j < data[0].length; j++) {
-                if(data[i][j] != 0 && !check(pos, i, j)) {
+    isValid(pos, data) {
+        for(let i = 0; i < data.length; i++){
+            for(let j=0; j < data[0].length; j++) {
+                if(data[i][j] != 0 && !this.check(pos, i, j)) {
                     return false;
                 }
             }
@@ -109,34 +126,36 @@ export function Game() {
     }
 
     //清除数据
-    function clearData() {
-        for(var i=0; i<cur.data.length; i++) {
-            for(var j=0; j<cur.data[0].length; j++) {
-                if(check(cur.origin, i, j)) {
-                    gameData[i+cur.origin.x][j+cur.origin.y] = 0;
+    clearData() {
+        const cur = this.cur;
+        for(let i = 0; i < cur.data.length; i++) {
+            for(let j = 0; j < cur.data[0].length; j++) {
+                if(this.check(cur.origin, i, j)) {
+                    this.gameData[i+cur.origin.x][j+cur.origin.y] = 0;
                 }
             }
         }
     }
 
     //设置数据
-    function setData() {
-        for(var i=0; i<cur.data.length; i++) {
-            for(var j=0; j<cur.data[0].length; j++) {
-                if(check(cur.origin, i, j)) {
-                    gameData[i+cur.origin.x][j+cur.origin.y] = cur.data[i][j];
+    setData() {
+        const cur = this.cur;
+        for(let i = 0; i < cur.data.length; i++) {
+            for(let j = 0; j < cur.data[0].length; j++) {
+                if(this.check(cur.origin, i, j)) {
+                    this.gameData[i+cur.origin.x][j+cur.origin.y] = cur.data[i][j];
                 }
             }
         }
     }
 
     // 下
-    function down() {
-        if (cur.canDown(isValid)) {
-            clearData();
-            cur.down();
-            setData();
-            refreshDivs(gameData, gameDivs);
+    down() {
+        if (this.cur.canDown(this.isValidFun)) {
+            this.clearData();
+            this.cur.down();
+            this.setData();
+            this.refreshContentDivs();
             return true;
         } else {
             return false;
@@ -144,55 +163,58 @@ export function Game() {
     }
 
     // 右
-    function right() {
-        if (cur.canRight(isValid)) {
-            clearData();
-            cur.right();
-            setData();
-            refreshDivs(gameData, gameDivs);
+    right() {
+        if (this.cur.canRight(this.isValidFun)) {
+            this.clearData();
+            this.cur.right();
+            this.setData();
+            this.refreshContentDivs();
         }
     }
 
     // 左
-    function left() {
-        if (cur.canLeft(isValid)) {
-            clearData();
-            cur.left();
-            setData();
-            refreshDivs(gameData, gameDivs);
+    left() {
+        if (this.cur.canLeft(this.isValidFun)) {
+            this.clearData();
+            this.cur.left();
+            this.setData();
+            this.refreshContentDivs();
         }
     }
 
      // 旋转
-     function rotate() {
-        if (cur.canRotate(isValid)) {
-            clearData();
-            cur.rotate();
-            setData();
-            refreshDivs(gameData, gameDivs);
+     rotate() {
+        if (this.cur.canRotate(this.isValidFun)) {
+            this.clearData();
+            this.cur.rotate();
+            this.setData();
+            this.refreshContentDivs();
         }
     }
 
     // 方块移动到底部，给它固定
-    function fixed() {
-        for(var i = 0; i < cur.data.length; i ++) {
-            for(var j = 0; j < cur.data[0].length; j ++) {
-                if(check(cur.origin, i, j)) {
+    fixed() {
+        const cur = this.cur;
+        const gameData = this.gameData;
+        for(let i = 0; i < cur.data.length; i ++) {
+            for(let j = 0; j < cur.data[0].length; j ++) {
+                if(this.check(cur.origin, i, j)) {
                     if(gameData[cur.origin.x + i][cur.origin.y + j] == 2) {
                         gameData[cur.origin.x + i][cur.origin.y + j] = 1;
                     }
                 }
             }
         }
-        refreshDivs(gameData, gameDivs);
+        this.refreshContentDivs();
     }
 
     // 消除方块
-    function checkClear() {
-        var line = 0;
-        for(var i = gameData.length -1; i >=0; i--) {
-            var clear = true;
-            for(var j = 0; j<gameData[0].length; j ++) {
+    checkClear() {
+        const gameData = this.gameData;
+        let line = 0;
+        for(let i = gameData.length -1; i >= 0; i--) {
+            let clear = true;
+            for(let j = 0; j<gameData[0].length; j ++) {
                 if (gameData[i][j] != 1) {
                     clear = false;
                     break;
@@ -200,12 +222,12 @@ export function Game() {
             }
             if (clear) {
                 line += 1;
-                for(var m=i; m>0; m--) {
-                    for(var n=0; n<gameData[0].length; n ++) {
+                for(let m = i; m > 0; m--) {
+                    for(let n = 0; n < gameData[0].length; n ++) {
                         gameData[m][n] = gameData[m - 1][n];
                     }
                 }
-                for(var n=0; n<gameData[0].length; n ++) {
+                for(let n = 0; n < gameData[0].length; n ++) {
                     gameData[0][n] = 0;
                 }
                 i++
@@ -215,9 +237,10 @@ export function Game() {
     }
 
     //检查游戏结束
-    function checkGameOver() {
-        var gameOver = false;
-        for(var i=0; i<gameData[0].length; i++) {
+    checkGameOver() {
+        const gameData = this.gameData;
+        let gameOver = false;
+        for(let i = 0; i < gameData[0].length; i++) {
             if(gameData[1][i] == 1) {
                 gameOver = true;
             }
@@ -226,42 +249,43 @@ export function Game() {
     }
 
     // 游戏结束
-    function gameOver(winner) {
-        var desc = winner ? "你赢了" : "你输了";
-        resultDiv.innerHTML = desc;
+    gameOver(winner) {
+        this.resultDiv.innerHTML = winner ? "你赢了" : "你输了";
     }
 
     // 底部增加行
-    function addTailLines(lines) {
-        for(i = 0; i<gameData.length - lines.length; i++) {
+    addTailLines(lines) {
+        const gameData = this.gameData;
+        const cur = this.cur;
+        for(let i = 0; i < gameData.length - lines.length; i++) {
             gameData[i] = gameData[i + lines.length];
         }
-        for(var i=0; i<lines.length; i++) {
+        for(let i = 0; i < lines.length; i++) {
             gameData[gameData.length - lines.length + i] = lines[i];
         }
         cur.origin.x -= lines.length;
         if (cur.origin.x < 0) {
             cur.origin.x = 0;
         }
-        refreshDivs(gameData, gameDivs);
+        this.refreshContentDivs();
     }
 
     //使用下一个方块
-    function performNext(type, dir) {
-        cur = next;
-        setData();
-        next = SquareFactory.make(type, dir);
-        refreshDivs(gameData, gameDivs);
-        refreshDivs(next.data, nextDivs);
+    performNext(type, dir) {
+        this.cur = this.next;
+        this.setData();
+        this.next = SquareFactory.make(type, dir);
+        this.refreshContentDivs();
+        this.refreshNextDivs();
     }
 
     // 设置时间
-    function setTime(time) {
-        timeDiv.innerHTML = time;
+    setTime(time) {
+        this.timeDiv.innerHTML = time;
     }
 
-    function addScore(line) {
-        var s = 0;
+    addScore(line) {
+        let s = 0;
         switch(line) {
             case 1:
                 s = 10;
@@ -278,35 +302,10 @@ export function Game() {
             default:   
         }
         score += s;
-        scoreDiv.innerHTML = score;
+        this.scoreDiv.innerHTML = score;
     }
 
-    //初始化
-    function init(doms, type, dir) {
-        gameDiv = doms.gameDiv;
-        nextDiv = doms.nextDiv;
-        timeDiv = doms.timeDiv;
-        scoreDiv = doms.scoreDiv;
-        resultDiv = doms.resultDiv;
-        next = SquareFactory.make(type, dir);
-        initDivs(gameDiv, gameData, gameDivs);
-        initDivs(nextDiv, next.data, nextDivs);
-        refreshDivs(next.data, nextDivs);
+    fall() {
+        while(this.down()) {}
     }
-
-    // 导出API
-    this.init = init;
-    this.down = down;
-    this.left = left;
-    this.right = right;
-    this.rotate = rotate;
-    this.fall = function() { while(down()){} };
-    this.fixed = fixed;
-    this.performNext = performNext;
-    this.checkClear = checkClear;
-    this.checkGameOver = checkGameOver;
-    this.setTime = setTime;
-    this.addScore = addScore;
-    this.gameOver = gameOver;
-    this.addTailLines = addTailLines;
 }

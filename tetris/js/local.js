@@ -2,9 +2,9 @@ import { Game } from './game.js';
 
 export class Local {
 
-    constructor() {
+    constructor(doms) {
         // 游戏核心
-        this.game = new Game();
+        this.game = new Game(doms, this.generateType(), this.generateDir());
         //时间间隔
         this.INTERVAL = 200;
         //定时器
@@ -88,7 +88,6 @@ export class Local {
     }
 
     start(doms){
-        this.game.init(doms, this.generateType(), this.generateDir());
         this.bindKeyEvent();
         this.game.performNext(this.generateType(), this.generateDir());
         this.timer = setInterval(this.move.bind(this), this.INTERVAL);
