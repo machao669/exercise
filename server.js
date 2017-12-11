@@ -4,7 +4,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 // 设置主机和端口
-const hostname = '127.0.0.1';
+const hostname = '10.0.0.88';
 const port = 7999;
 
 // 使用静态资源
@@ -39,7 +39,9 @@ function bindListener(socket, event) {
   socket.on(event, (data) => {
     const num = socket.clientNum;
     const rivalNum =  num % 2 === 0 ? num - 1 : num + 1;
-    socketMap[rivalNum].emit(event, data);
+    if (socketMap[rivalNum]) {
+      socketMap[rivalNum].emit(event, data);
+    }
   })
 }
 
@@ -50,9 +52,11 @@ io.on("connection", (socket) => {
 
   if (clientCount % 2 === 1) {
     socket.emit('waiting', 'waiting for another person');
-  } else {
+  } else if (socketMap[(clientCount - 1)]) {
     socket.emit('start');
     socketMap[(clientCount - 1)].emit('start');
+  } else {
+    socket.emit('leave');
   }
 
   bindListener(socket, 'init');
@@ -66,8 +70,15 @@ io.on("connection", (socket) => {
   bindListener(socket, 'line');
   bindListener(socket, 'time');
   bindListener(socket, 'lose');
+  bindListener(socket, 'bottomLine');
+  bindListener(socket, 'addTailLines');
 
   socket.on('disconnect', () => {
-
+    const num = socket.clientNum;
+    const rivalNum =  num % 2 === 0 ? num - 1 : num + 1;
+    if (socketMap[rivalNum]) {
+      socketMap[rivalNum].emit('leave');
+    }
+    delete socketMap[socket.clientNum];
   })
 })

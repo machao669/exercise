@@ -61,6 +61,10 @@ export class Remote {
         socket.on('lose', (data) => {
             this.game.gameOver(false);
         })
+
+        socket.on('addTailLines', (data) => {
+            this.game.addTailLines(data);
+        })
     }
 
     get doms() {

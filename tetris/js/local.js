@@ -19,6 +19,16 @@ export class Local {
         })
         socket.on("lose", () => {
             this.game.gameOver(true);
+            this.stop();
+        })
+        socket.on("leave", () => {
+            document.getElementById('local-result').innerHTML = '对方掉线';
+            document.getElementById('remote-result').innerHTML = '已掉线';
+            this.stop();
+        })
+        socket.on('bottomLine', (data) => {
+            this.game.addTailLines(data);
+            socket.emit('addTailLines', data);
         })
     }
 
@@ -65,6 +75,7 @@ export class Local {
             if (line) {
                 game.addScore(line);
                 this.socket.emit("line", line);
+                this.socket.emit("bottomLine", this.generataBottomLine(line));
             }
             const gameOver = game.checkGameOver();
             if (gameOver) {
