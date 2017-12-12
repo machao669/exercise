@@ -1,5 +1,4 @@
 export class Square {
-
     constructor(rotates) {
         // 原点
         this.origin = { x: 0, y: 0 };

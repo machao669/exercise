@@ -1,28 +1,27 @@
 import { SquareFactory } from './squareFactory';
 
 export class Game {
-
     constructor(doms, type, dir) {
         // dom元素
-        this.gameDiv = doms.gameDiv;;
+        this.gameDiv = doms.gameDiv;
         this.nextDiv = doms.nextDiv;
         this.timeDiv = doms.timeDiv;
         this.scoreDiv = doms.scoreDiv;
         this.resultDiv = doms.resultDiv;
 
-        //方块
+        // 方块
         this.cur = null;
         this.next = SquareFactory.make(type, dir);
 
         // 得分
         this.score = 0;
 
-         // 游戏矩阵
+        // 游戏矩阵
         this.nextData = [
             [0, 0, 0, 0],
             [0, 0, 0, 0],
             [0, 0, 0, 0],
-            [0, 0, 0, 0], 
+            [0, 0, 0, 0],
         ];
         this.gameData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -47,25 +46,25 @@ export class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
 
-        //divs
+        // divs
         this.nextDivs = [];
         this.gameDivs = [];
 
         this.initDivs(this.gameDiv, this.gameData, this.gameDivs);
         this.initDivs(this.nextDiv, this.next.data, this.nextDivs);
-        this.refreshNextDivs()
+        this.refreshNextDivs();
         this.isValidFun = this.isValid.bind(this);
     }
-    
-    //init function
+
+    // init function
     initDivs(container, data, divs) {
-        for(let i = 0; i < data.length; i ++) {
+        for (let i = 0; i < data.length; i++) {
             const div = [];
             for (let j = 0; j < data[0].length; j++) {
                 const newNode = document.createElement('div');
                 newNode.className = 'none';
-                newNode.style.top = (i * 20) + 'px';
-                newNode.style.left = (j * 20) + 'px';
+                newNode.style.top = `${i * 20}px`;
+                newNode.style.left = `${j * 20}px`;
                 container.appendChild(newNode);
                 div.push(newNode);
             }
@@ -81,43 +80,43 @@ export class Game {
         this.refreshDivs(this.gameData, this.gameDivs);
     }
 
-    //refresh 
+    // refresh
     refreshDivs(data, divs) {
-        for(let i = 0; i < data.length; i++) {
-            for(let j = 0; j < data[0].length; j++){
-                if(data[i][j] == 0) {
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[0].length; j++) {
+                if (data[i][j] === 0) {
                     divs[i][j].className = 'none';
-                }else if(data[i][j] == 1) {
+                } else if (data[i][j] === 1) {
                     divs[i][j].className = 'done';
-                }else if(data[i][j] == 2) {
+                } else if (data[i][j] === 2) {
                     divs[i][j].className = 'current';
                 }
             }
         }
     }
 
-    //检测点合法
+    // 检测点合法
     check(pos, x, y) {
         const gameData = this.gameData;
         if (pos.x + x < 0) {
             return false;
-        } else if(pos.x + x >= gameData.length) {
+        } else if (pos.x + x >= gameData.length) {
             return false;
-        } else if(pos.y + y < 0) {
+        } else if (pos.y + y < 0) {
             return false;
-        } else if(pos.y + y >= gameData[0].length) {
+        } else if (pos.y + y >= gameData[0].length) {
             return false;
-        } else if(gameData[pos.x + x][pos.y + y] == 1) {
+        } else if (gameData[pos.x + x][pos.y + y] === 1) {
             return false;
         }
         return true;
     }
 
-    //判断数据是否合法
+    // 判断数据是否合法
     isValid(pos, data) {
-        for(let i = 0; i < data.length; i++){
-            for(let j=0; j < data[0].length; j++) {
-                if(data[i][j] != 0 && !this.check(pos, i, j)) {
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[0].length; j++) {
+                if (data[i][j] !== 0 && !this.check(pos, i, j)) {
                     return false;
                 }
             }
@@ -125,25 +124,25 @@ export class Game {
         return true;
     }
 
-    //清除数据
+    // 清除数据
     clearData() {
         const cur = this.cur;
-        for(let i = 0; i < cur.data.length; i++) {
-            for(let j = 0; j < cur.data[0].length; j++) {
-                if(this.check(cur.origin, i, j)) {
-                    this.gameData[i+cur.origin.x][j+cur.origin.y] = 0;
+        for (let i = 0; i < cur.data.length; i++) {
+            for (let j = 0; j < cur.data[0].length; j++) {
+                if (this.check(cur.origin, i, j)) {
+                    this.gameData[i + cur.origin.x][j + cur.origin.y] = 0;
                 }
             }
         }
     }
 
-    //设置数据
+    // 设置数据
     setData() {
         const cur = this.cur;
-        for(let i = 0; i < cur.data.length; i++) {
-            for(let j = 0; j < cur.data[0].length; j++) {
-                if(this.check(cur.origin, i, j)) {
-                    this.gameData[i+cur.origin.x][j+cur.origin.y] = cur.data[i][j];
+        for (let i = 0; i < cur.data.length; i++) {
+            for (let j = 0; j < cur.data[0].length; j++) {
+                if (this.check(cur.origin, i, j)) {
+                    this.gameData[i + cur.origin.x][j + cur.origin.y] = cur.data[i][j];
                 }
             }
         }
@@ -182,8 +181,8 @@ export class Game {
         }
     }
 
-     // 旋转
-     rotate() {
+    // 旋转
+    rotate() {
         if (this.cur.canRotate(this.isValidFun)) {
             this.clearData();
             this.cur.rotate();
@@ -196,10 +195,10 @@ export class Game {
     fixed() {
         const cur = this.cur;
         const gameData = this.gameData;
-        for(let i = 0; i < cur.data.length; i ++) {
-            for(let j = 0; j < cur.data[0].length; j ++) {
-                if(this.check(cur.origin, i, j)) {
-                    if(gameData[cur.origin.x + i][cur.origin.y + j] == 2) {
+        for (let i = 0; i < cur.data.length; i++) {
+            for (let j = 0; j < cur.data[0].length; j++) {
+                if (this.check(cur.origin, i, j)) {
+                    if (gameData[cur.origin.x + i][cur.origin.y + j] === 2) {
                         gameData[cur.origin.x + i][cur.origin.y + j] = 1;
                     }
                 }
@@ -212,36 +211,36 @@ export class Game {
     checkClear() {
         const gameData = this.gameData;
         let line = 0;
-        for(let i = gameData.length -1; i >= 0; i--) {
+        for (let i = gameData.length - 1; i >= 0; i--) {
             let clear = true;
-            for(let j = 0; j<gameData[0].length; j ++) {
-                if (gameData[i][j] != 1) {
+            for (let j = 0; j < gameData[0].length; j++) {
+                if (gameData[i][j] !== 1) {
                     clear = false;
                     break;
                 }
             }
             if (clear) {
                 line += 1;
-                for(let m = i; m > 0; m--) {
-                    for(let n = 0; n < gameData[0].length; n ++) {
+                for (let m = i; m > 0; m--) {
+                    for (let n = 0; n < gameData[0].length; n++) {
                         gameData[m][n] = gameData[m - 1][n];
                     }
                 }
-                for(let n = 0; n < gameData[0].length; n ++) {
+                for (let n = 0; n < gameData[0].length; n++) {
                     gameData[0][n] = 0;
                 }
-                i++
+                i++;
             }
         }
         return line;
     }
 
-    //检查游戏结束
+    // 检查游戏结束
     checkGameOver() {
         const gameData = this.gameData;
         let gameOver = false;
-        for(let i = 0; i < gameData[0].length; i++) {
-            if(gameData[1][i] == 1) {
+        for (let i = 0; i < gameData[0].length; i++) {
+            if (gameData[1][i] === 1) {
                 gameOver = true;
             }
         }
@@ -257,10 +256,10 @@ export class Game {
     addTailLines(lines) {
         const gameData = this.gameData;
         const cur = this.cur;
-        for(let i = 0; i < gameData.length - lines.length; i++) {
+        for (let i = 0; i < gameData.length - lines.length; i++) {
             gameData[i] = gameData[i + lines.length];
         }
-        for(let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
             gameData[gameData.length - lines.length + i] = lines[i];
         }
         cur.origin.x -= lines.length;
@@ -270,7 +269,7 @@ export class Game {
         this.refreshContentDivs();
     }
 
-    //使用下一个方块
+    // 使用下一个方块
     performNext(type, dir) {
         this.cur = this.next;
         this.setData();
@@ -286,7 +285,7 @@ export class Game {
 
     addScore(line) {
         let s = 0;
-        switch(line) {
+        switch (line) {
             case 1:
                 s = 10;
                 break;
@@ -298,14 +297,14 @@ export class Game {
                 break;
             case 4:
                 s = 100;
-                break; 
-            default:   
+                break;
+            default:
         }
         this.score += s;
         this.scoreDiv.innerHTML = this.score;
     }
 
     fall() {
-        while(this.down()) {}
+        while (this.down()) {}
     }
 }

@@ -172,28 +172,28 @@ const Square7 = [
 export class SquareFactory {
     static make(index, dir) {
         let s = null;
-        switch(index) {
+        switch (index) {
             case 0:
                 s = Square1;
-            break;
+                break;
             case 1:
                 s = Square2;
-            break;
+                break;
             case 2:
                 s = Square3;
-            break;
+                break;
             case 3:
                 s = Square4;
-            break;
+                break;
             case 4:
                 s = Square5;
-            break;
+                break;
             case 5:
                 s = Square6;
-            break;
+                break;
             case 6:
                 s = Square7;
-            break;
+                break;
             default:
         }
         const sq = new Square(s);
