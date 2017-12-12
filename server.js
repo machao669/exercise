@@ -23,6 +23,10 @@ routes.forEach((route) => {
   })
 })
 
+app.render("/demo", {name: "haha"}, (err, html) => {
+
+})
+
 // api 路由分发
 
 

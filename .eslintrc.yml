@@ -43,7 +43,7 @@ rules:
           objects: always-multiline
           imports: always-multiline
           exports: always-multiline
-          fucntions: ignore
+          functions: ignore
 
     react/prop-types: 0
     react/jsx-no-bind: 0

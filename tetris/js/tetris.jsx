@@ -9,7 +9,7 @@ export default class TetrisPage extends Component {
     }
 
     componentDidMount() {
-        const socket = window.io.connect('http://127.0.0.1:7999');
+        const socket = window.io.connect('http://10.0.0.88:7999');
         const local = new Local(socket);
         const remote = new Remote(socket);
         socket.on('waiting', (desc) => {
@@ -23,7 +23,7 @@ export default class TetrisPage extends Component {
                 <div>请用方向键和空格键进行操作，上：旋转，左：左移，下：下移，右：右移，空格：坠落</div>
                 <div id="waiting" id='wait' />
                 <div id="local" className="square">
-                    <div className="title">我的游戏区域</div>  
+                    <div className="title">我的游戏区域</div>
                     <div className="game" id="local-game" />
                     <div className="next" id="local-next" />
                     <div className="info">
@@ -33,7 +33,7 @@ export default class TetrisPage extends Component {
                     </div>
                 </div>
                 <div id="remote" className="square">
-                    <div className="title">对方游戏区域</div>  
+                    <div className="title">对方游戏区域</div>
                     <div className="game" id="remote-game" />
                     <div className="next" id="remote-next" />
                     <div className="info">
