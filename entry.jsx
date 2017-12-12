@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import './base.scss';
 import TetrisPage from './tetris/js/tetris';
 
-function Home()  {
+function Home() {
     return (
         <ul>
             <li>
