@@ -29,6 +29,9 @@ const routes = [
     }, {
         url: '/tetris',
         title: '俄罗斯方块',
+    }, {
+        url: '/xhr',
+        title: '俄罗斯方块',
     },
 ];
 
@@ -39,7 +42,9 @@ routes.forEach((route) => {
 });
 
 // api 路由分发
-
+app.get('/v1.0/test', (req, res) => {
+    res.send(JSON.stringify({ a: 1, b: 2 }));
+});
 
 // 监听
 server.listen(port, hostname, () => {
