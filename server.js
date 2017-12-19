@@ -47,6 +47,7 @@ const routes = [
 
 routes.forEach((route) => {
     app.get(route.url, (req, res) => {
+        log(req);
         res.render('base', { title: route.title });
     });
 });
@@ -58,7 +59,7 @@ app.get('/v1.0/test', (req, res) => {
 });
 app.post('/v1.0/test', (req, res) => {
     log(req);
-    res.json(req.body);
+    res.send(JSON.stringify(req.body));
 });
 
 // 监听
@@ -122,7 +123,7 @@ const debug = true;
 
 function log(req) {
     if (debug) {
-        console.log(req.path);
+        console.log(`ip: ${req.ip}     route: ${req.path}`);
         console.log(req.body);
     }
 }

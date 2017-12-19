@@ -17,7 +17,7 @@ class XHR {
     constructor(method, url, options) {
         this.method = method;
         this.options = this.createOptions(options);
-        this.url = this.options.query ? url + this.params(this.options.query) : url;
+        this.url = url;
         this.xmlhttp = new XMLHttpRequest();
         this.promise = new QPromise(this.bindPromise.bind(this));
     }
@@ -42,6 +42,7 @@ class XHR {
     createOptions(options) {
         let defOptions = {
             async: true,
+            contentType: 'application/plain; charset=UTF-8',
         };
         if (options) {
             defOptions = Object.assign(defOptions, options);
@@ -52,16 +53,21 @@ class XHR {
     open() {
         const options = this.options;
         let json = null;
+        let url = this.url;
         if (options.json !== undefined) {
             json = JSON.stringify(options.json);
+            options.contentType = 'application/json; charset=UTF-8';
+        } else if (options.query !== undefined) {
+            url = `${url}?${this.params(options.query)}`;
         }
-        this.xmlhttp.open(this.method, this.url, this.options.async);
+        this.xmlhttp.open(this.method, url, options.async);
+        this.xmlhttp.setRequestHeader("Content-type", options.contentType);
         this.xmlhttp.send(json);
     }
 
     params(query) {
         if (typeof query === 'object') {
-            let q = '?';
+            let q = '';
             const keys = Object.keys(query);
             keys.forEach((k, index) => {
                 q = `${q}${k}=${query[k]}`;
