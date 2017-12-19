@@ -2,7 +2,21 @@
 export class Q {
     static ajax(method, url, async = true) {
         const xmlhttp = new XMLHttpRequest();
-        const p = new QPromise(xmlhttp);
+        const p = new QPromise((resolve, reject) => {
+            xmlhttp.onreadystatechange = () => {
+                const state = xmlhttp.readyState;
+                const status = xmlhttp.status;
+                if (state === 4 && ((status >= 200 && status <= 300) || status === 304)) {
+                    resolve(xmlhttp.response);
+                } else if (state === 4) {
+                    reject({ statusCode: status, reason: xmlhttp.response });
+                }
+            };
+            xmlhttp.timeout = 1000;
+            xmlhttp.ontimeout = () => {
+                reject({ statusCode: 460, reason: "超时" });
+            };
+        });
         xmlhttp.open(method, url, async);
         xmlhttp.send();
         return p;
@@ -17,29 +31,14 @@ export class Q {
     }
 }
 
+
 class QPromise {
-    constructor(xhr) {
+    constructor(fun) {
         this.state = QPromise.kStatePending; // rejected resolved
         this.doneList = [];
         this.failList = [];
         this.data = null;
-        this.init(xhr);
-    }
-
-    init(xhr) {
-        xhr.onreadystatechange = () => {
-            const state = xhr.readyState;
-            const status = xhr.status;
-            if (state === 4 && ((status >= 200 && status <= 300) || status === 304)) {
-                this.resolve(xhr.response);
-            } else if (state === 4) {
-                this.reject({ statusCode: status, reason: xhr.response });
-            }
-        };
-        xhr.timeout = 1000;
-        xhr.ontimeout = () => {
-            this.reject({ statusCode: 460, reason: "超时" });
-        };
+        fun(this.resolve.bind(this), this.reject.bind(this));
     }
 
     done(fun) {
@@ -93,7 +92,7 @@ class QPromise {
         if (this.state === QPromise.kStateRejected) {
             return new QPromise((resolve, reject) => {
                 try {
-                    const x = onReject(this.data.e);
+                    const x = onReject(this.data);
                     if (x instanceof QPromise) {
                         x.then(resolve, reject);
                     }

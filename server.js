@@ -32,6 +32,9 @@ const routes = [
     }, {
         url: '/xhr',
         title: '俄罗斯方块',
+    }, {
+        url: '/cssdemo',
+        title: 'css样式demo',
     },
 ];
 

@@ -1,0 +1,30 @@
+#css-page {
+
+    .img {
+        width: 50px;
+        height: 50px;
+        float: left;
+        background: yellow;
+    }
+
+    .container {
+        border: 1px solid black;
+    }
+
+    .bfc {
+        overflow: hidden;
+    }
+
+    section {
+        height: 50px;
+        margin: 20px 0;
+    }
+
+    .container > div:nth-child(Odd) section {
+        background: cyan;
+    }
+
+    .container > div:nth-child(even) section {
+        background: cornflowerblue;
+    }
+}
