@@ -3,6 +3,8 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const cons = require('consolidate');
+const bodyParser = require('body-parser');
+// const multer = require('multer');
 
 // 设置主机和端口
 const hostname = '10.0.0.88';
@@ -10,6 +12,11 @@ const port = 7999;
 
 // 使用静态资源
 app.use(express.static('static'));
+
+// 使用提交的body
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+// app.use(multer()); // for parsing multipart/form-data
 
 // 设置渲染引擎
 app.engine('html', cons.swig);
@@ -46,7 +53,12 @@ routes.forEach((route) => {
 
 // api 路由分发
 app.get('/v1.0/test', (req, res) => {
+    log(req);
     res.send(JSON.stringify({ a: 1, b: 2 }));
+});
+app.post('/v1.0/test', (req, res) => {
+    log(req);
+    res.json(req.body);
 });
 
 // 监听
@@ -105,3 +117,12 @@ io.on("connection", (socket) => {
         delete socketMap[socket.clientNum];
     });
 });
+
+const debug = true;
+
+function log(req) {
+    if (debug) {
+        console.log(req.path);
+        console.log(req.body);
+    }
+}

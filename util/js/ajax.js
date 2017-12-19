@@ -1,36 +1,84 @@
 
 export class Q {
-    static ajax(method, url, async = true) {
-        const xmlhttp = new XMLHttpRequest();
-        const p = new QPromise((resolve, reject) => {
-            xmlhttp.onreadystatechange = () => {
-                const state = xmlhttp.readyState;
-                const status = xmlhttp.status;
-                if (state === 4 && ((status >= 200 && status <= 300) || status === 304)) {
-                    resolve(xmlhttp.response);
-                } else if (state === 4) {
-                    reject({ statusCode: status, reason: xmlhttp.response });
-                }
-            };
-            xmlhttp.timeout = 1000;
-            xmlhttp.ontimeout = () => {
-                reject({ statusCode: 460, reason: "超时" });
-            };
-        });
-        xmlhttp.open(method, url, async);
-        xmlhttp.send();
-        return p;
+    static ajax(method, url, options) {
+        return new XHR(method, url, options).send();
     }
 
-    static get(url, async) {
-        return Q.ajax('get', url, async);
+    static get(url, options) {
+        return Q.ajax('get', url, options);
     }
 
-    static post(url, async) {
-        return Q.ajax('post', url, async);
+    static post(url, options) {
+        return Q.ajax('post', url, options);
     }
 }
 
+class XHR {
+    constructor(method, url, options) {
+        this.method = method;
+        this.options = this.createOptions(options);
+        this.url = this.options.query ? url + this.params(this.options.query) : url;
+        this.xmlhttp = new XMLHttpRequest();
+        this.promise = new QPromise(this.bindPromise.bind(this));
+    }
+
+    bindPromise(resolve, reject) {
+        const xmlhttp = this.xmlhttp;
+        xmlhttp.onreadystatechange = () => {
+            const state = xmlhttp.readyState;
+            const status = xmlhttp.status;
+            if (state === 4 && ((status >= 200 && status <= 300) || status === 304)) {
+                resolve(xmlhttp.response);
+            } else if (state === 4) {
+                reject({ statusCode: status, reason: xmlhttp.response });
+            }
+        };
+        xmlhttp.timeout = 1000;
+        xmlhttp.ontimeout = () => {
+            reject({ statusCode: 460, reason: "超时" });
+        };
+    }
+
+    createOptions(options) {
+        let defOptions = {
+            async: true,
+        };
+        if (options) {
+            defOptions = Object.assign(defOptions, options);
+        }
+        return defOptions;
+    }
+
+    open() {
+        const options = this.options;
+        let json = null;
+        if (options.json !== undefined) {
+            json = JSON.stringify(options.json);
+        }
+        this.xmlhttp.open(this.method, this.url, this.options.async);
+        this.xmlhttp.send(json);
+    }
+
+    params(query) {
+        if (typeof query === 'object') {
+            let q = '?';
+            const keys = Object.keys(query);
+            keys.forEach((k, index) => {
+                q = `${q}${k}=${query[k]}`;
+                if (index !== keys.length - 1) {
+                    q = `${q}&`;
+                }
+            });
+            return q;
+        }
+        return query;
+    }
+
+    send() {
+        this.open();
+        return this.promise;
+    }
+}
 
 class QPromise {
     constructor(fun) {

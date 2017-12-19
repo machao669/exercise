@@ -10,9 +10,9 @@ export default class XHRPage extends Component {
     }
 
     componentDidMount() {
-        Q.get(`/v1.0/test`)
+        Q.post(`/v1.0/test`, { json: { a: 1, b: 2, c: 3 } })
             .done((res) => {
-                this.setState({ response: res.toString() });
+                this.setState({ response: res });
             });
     }
 
