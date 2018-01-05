@@ -42,6 +42,9 @@ const routes = [
     }, {
         url: '/cssdemo',
         title: 'css样式demo',
+    }, {
+        url: '/widgets',
+        title: 'widgets',
     },
 ];
 

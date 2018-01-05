@@ -1,0 +1,74 @@
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+
+    ul,li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        display: inline-block;
+    }
+
+    .item-ct {
+        position: absolute;
+    }
+
+    .item img {
+        width: 100%;
+    }
+
+    .btn {
+        position: absolute;
+        top: 50%;
+        cursor: pointer;
+        margin-top: -15px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 18px;
+        text-decoration: none;
+        color: #fff;
+        border-radius: 50%;
+        background-color: #333;
+        opacity: 0.6;
+        display: block;
+    }
+
+    .btn-next {
+        right: 10px;
+    }
+
+    .btn-pre {
+        left: 10px;
+    }
+
+    .bullet-ct {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    .bullet {
+
+        li {
+            display: inline-block;
+            width: 20px;
+            height: 6px;
+            border-radius: 3px;
+            background-color: #fff;
+            margin: 0 5px;
+            cursor: pointer;
+
+            &.active {
+                background-color: #666;
+            }
+        }
+    }
+}
