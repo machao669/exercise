@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const WebpackChunkHash = require('webpack-chunk-hash');
+const serverConf = require('./conf');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const proj = '.';
@@ -14,21 +15,21 @@ let chunkhashPlaceholder = '';
 let contenthashPlaceholder = '';
 
 if (isProduction) {
-    publicPath = ``; //线上cdn环境
+    publicPath = ``; // 线上cdn环境
     extraPlugins = [
         new webpack.LoaderOptionsPlugin({
             minimize: true,
             debug: false,
         }),
         new webpack.optimize.UglifyJsPlugin({
-            beautify: false,    // 最紧凑的输出
-            comments: false,    // 删除所有的注释
+            beautify: false, // 最紧凑的输出
+            comments: false, // 删除所有的注释
             sourceMap: true,
             compress: {
-                warnings: false,        // 在UglifyJs删除没有用到的代码时不输出警告
-                drop_console: true,     // 删除所有的 `console` 语句，可以兼容ie浏览器
-                collapse_vars: true,    // 内嵌定义了但是只用到一次的变量
-                reduce_vars: true,      // 提取出出现多次但是没有定义成变量去引用的静态值
+                warnings: false, // 在UglifyJs删除没有用到的代码时不输出警告
+                drop_console: true, // 删除所有的 `console` 语句，可以兼容ie浏览器
+                collapse_vars: true, // 内嵌定义了但是只用到一次的变量
+                reduce_vars: true, // 提取出出现多次但是没有定义成变量去引用的静态值
             },
         }),
     ];
@@ -111,7 +112,7 @@ const config = {
                                     '> 1%',
                                     'IE >= 10',
                                     'Chrome >= 39',
-                                    'Safari >= 4',  // for phantomjs
+                                    'Safari >= 4', // for phantomjs
                                     'ios >= 8',
                                     'Android >= 4.0',
                                     'last 2 versions',
@@ -146,6 +147,11 @@ const config = {
         // "react-router-dom": "ReactRouterDOM",
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
+    devServer: {
+        contentBase: './static',
+        port: serverConf.webpackDevServerPort,
+        hot: true,
+    },
     stats: {
         children: false,
     },

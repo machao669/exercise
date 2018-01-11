@@ -3,9 +3,11 @@ import { Local } from './local';
 import { Remote } from './remote';
 import '../css/style.scss';
 
+const conf = require('../../conf');
+
 export default class TetrisPage extends Component {
     componentDidMount() {
-        const socket = window.io.connect('http://10.0.0.88:7999');
+        const socket = window.io.connect(conf.ws);
         const local = new Local(socket);
         const remote = new Remote(socket);
         socket.on('waiting', (desc) => {
