@@ -6,10 +6,6 @@ const cons = require('consolidate');
 const bodyParser = require('body-parser');
 const config = require('./conf');
 
-const webpackConfig = require('./webpack.config');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
-
 // const multer = require('multer');
 
 // 设置主机和端口
@@ -17,9 +13,7 @@ const hostname = config.hostname;
 const port = config.port;
 
 // 使用静态资源
-app.use(webpackDevMiddleware(webpack(webpackConfig), {
-    publicPath: webpackConfig.output.publicPath,
-}));
+app.use(express.static('./dist'));
 
 // 使用提交的body
 app.use(bodyParser.json()); // for parsing application/json

@@ -9,13 +9,12 @@ const serverConf = require('./conf');
 const isProduction = process.env.NODE_ENV === 'production';
 const proj = '.';
 
-let publicPath = '/static/';
+const publicPath = '/';
 let extraPlugins = [];
 let chunkhashPlaceholder = '';
 let contenthashPlaceholder = '';
 
 if (isProduction) {
-    publicPath = ``; // 线上cdn环境
     extraPlugins = [
         new webpack.LoaderOptionsPlugin({
             minimize: true,
@@ -56,7 +55,7 @@ const config = {
     },
     output: {
         publicPath,
-        path: path.resolve(__dirname, `${proj}/static`),
+        path: path.resolve(__dirname, 'dist'),
         filename: `[name].${chunkhashPlaceholder}js`,
         chunkFilename: `[name].${chunkhashPlaceholder}js`,
     },
@@ -74,6 +73,8 @@ const config = {
             path: rootAssetPath,
             prettyPrint: true,
         }),
+        new webpack.NamedModulesPlugin(),
+        // new CleanWepackPlugin(['dist']),
     ].concat(extraPlugins),
     module: {
         rules: [
@@ -142,16 +143,8 @@ const config = {
         ],
     },
     externals: {
-        // react: "React",
-        // "react-dom": "ReactDOM",
-        // "react-router-dom": "ReactRouterDOM",
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
-    devServer: {
-        contentBase: './static',
-        port: serverConf.webpackDevServerPort,
-        hot: true,
-    },
     stats: {
         children: false,
     },
