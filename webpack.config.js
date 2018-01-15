@@ -4,7 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const WebpackChunkHash = require('webpack-chunk-hash');
-const serverConf = require('./conf');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const proj = '.';
