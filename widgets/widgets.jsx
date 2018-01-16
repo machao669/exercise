@@ -4,6 +4,7 @@ import pei1 from "./img/1.jpg";
 import pei2 from "./img/2.jpg";
 import pei3 from "./img/3.jpg";
 import pei4 from "./img/4.jpg";
+import './css/widgets.scss';
 
 export default class WidgetsPage extends Component {
     constructor(props) {
@@ -13,7 +14,6 @@ export default class WidgetsPage extends Component {
             bullet: true,
             width: 300,
             height: 200,
-            
         };
     }
 
@@ -64,6 +64,16 @@ export default class WidgetsPage extends Component {
                         <a href=""><img src={pei3} alt="3.jpg" /></a>
                         <a href=""><img src={pei4} alt="4.jpg" /></a>
                     </Carousel>
+                </div>
+
+                <div>
+                    <h3>鼠标hover，图片显示变宽的效果</h3>
+                    <div className="mask">
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                    </div>
                 </div>
             </div>
         );

@@ -1,0 +1,32 @@
+.mask {
+    display: flex;
+    width: 100%;
+
+    > div {
+        height: 360px;
+        flex: 1;
+        cursor: pointer;
+        
+        transition: .3s;
+
+        &:hover {
+            flex: 0 0 480px;
+        }
+
+        &:nth-child(1) {
+            background: url('../img/1.jpg') no-repeat center 0;
+        }
+
+        &:nth-child(2) {
+            background: url('../img/2.jpg') no-repeat center 0;
+        }
+
+        &:nth-child(3) {
+            background: url('../img/3.jpg') no-repeat center 0;
+        }
+
+        &:nth-child(4) {
+            background: url('../img/4.jpg') no-repeat center 0;
+        }
+    }
+}
