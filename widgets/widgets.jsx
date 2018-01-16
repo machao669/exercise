@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Carousel } from "./js/carousel";
+import pei1 from "./img/1.jpg";
+import pei2 from "./img/2.jpg";
+import pei3 from "./img/3.jpg";
+import pei4 from "./img/4.jpg";
 
 export default class WidgetsPage extends Component {
     constructor(props) {
@@ -9,6 +13,7 @@ export default class WidgetsPage extends Component {
             bullet: true,
             width: 300,
             height: 200,
+            
         };
     }
 
@@ -54,10 +59,10 @@ export default class WidgetsPage extends Component {
                         auto={this.state.auto}
                         bullet={this.state.bullet}
                     >
-                        <a href=""><img src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg" alt="1.jpg" /></a>
-                        <a href=""><img src="http://cdn.jirengu.com/book.jirengu.com/img/2.jpg" alt="2.jpg" /></a>
-                        <a href=""><img src="http://cdn.jirengu.com/book.jirengu.com/img/3.jpg" alt="3.jpg" /></a>
-                        <a href=""><img src="http://cdn.jirengu.com/book.jirengu.com/img/4.jpg" alt="4.jpg" /></a>
+                        <a href=""><img src={pei1} alt="1.jpg" /></a>
+                        <a href=""><img src={pei2} alt="2.jpg" /></a>
+                        <a href=""><img src={pei3} alt="3.jpg" /></a>
+                        <a href=""><img src={pei4} alt="4.jpg" /></a>
                     </Carousel>
                 </div>
             </div>

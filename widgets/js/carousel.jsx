@@ -14,6 +14,7 @@ export class Carousel extends Component {
     }
 
     componentDidMount() {
+        this.itemsNode.style.left = `${-this.width}px`;
         this.toggleInterVal(this.props);
     }
 
