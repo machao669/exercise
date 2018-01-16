@@ -1,134 +1,40 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
 const cons = require('consolidate');
 const bodyParser = require('body-parser');
 const config = require('./conf');
 
-// const multer = require('multer');
+// 路由
+const routes = require('./server/routes');
+// api路由
+const api = require('./server/api');
+// websocket
+const socket = require('./server/websocket');
 
-// 设置主机和端口
-const hostname = config.hostname;
+// 设置端口
 const port = config.port;
 
 // 使用静态资源
 app.use(express.static('./dist'));
-
 // 使用提交的body
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-// app.use(multer()); // for parsing multipart/form-data
-
 // 设置渲染引擎
 app.engine('html', cons.swig);
-
 // 设置view
 app.set('view engine', 'html');
 app.set('views', `${__dirname}/views`);
 
-// 页面路由分发
-const routes = [
-    {
-        url: '/',
-        title: '首页',
-    }, {
-        url: '/index',
-        title: '首页',
-    }, {
-        url: '/tetris',
-        title: '俄罗斯方块',
-    }, {
-        url: '/xhr',
-        title: '俄罗斯方块',
-    }, {
-        url: '/cssdemo',
-        title: 'css样式demo',
-    }, {
-        url: '/widgets',
-        title: 'widgets',
-    },
-];
-
-routes.forEach((route) => {
-    app.get(route.url, (req, res) => {
-        log(req);
-        res.render('base', { title: route.title });
-    });
-});
-
-// api 路由分发
-app.get('/v1.0/test', (req, res) => {
-    log(req);
-    res.send(JSON.stringify({ a: 1, b: 2 }));
-});
-app.post('/v1.0/test', (req, res) => {
-    log(req);
-    res.send(JSON.stringify(req.body));
-});
+// 页面路由绑定
+routes.bindApp(app);
+// api路由绑定
+api.bindApp(app);
 
 // 监听
-server.listen(port, hostname, () => {
-    console.log("服务启动，访问地址为 http://%s:%s", hostname, port);
+server.listen(port, () => {
+    console.log("服务启动，访问地址为 http://127.0.0.1:%s", port);
 });
 
-// websocket
-let clientCount = 0; // 客户端计数
-const socketMap = {};
-
-function bindListener(socket, event) {
-    socket.on(event, (data) => {
-        const num = socket.clientNum;
-        const rivalNum = num % 2 === 0 ? num - 1 : num + 1;
-        if (socketMap[rivalNum]) {
-            socketMap[rivalNum].emit(event, data);
-        }
-    });
-}
-
-io.on("connection", (socket) => {
-    clientCount += 1;
-    socket.clientNum = clientCount; // eslint-disable-line
-    socketMap[clientCount] = socket;
-
-    if (clientCount % 2 === 1) {
-        socket.emit('waiting', 'waiting for another person');
-    } else if (socketMap[(clientCount - 1)]) {
-        socket.emit('start');
-        socketMap[(clientCount - 1)].emit('start');
-    } else {
-        socket.emit('leave');
-    }
-
-    bindListener(socket, 'init');
-    bindListener(socket, 'next');
-    bindListener(socket, 'down');
-    bindListener(socket, 'right');
-    bindListener(socket, 'left');
-    bindListener(socket, 'fall');
-    bindListener(socket, 'rotate');
-    bindListener(socket, 'fixed');
-    bindListener(socket, 'line');
-    bindListener(socket, 'time');
-    bindListener(socket, 'lose');
-    bindListener(socket, 'bottomLine');
-    bindListener(socket, 'addTailLines');
-
-    socket.on('disconnect', () => {
-        const num = socket.clientNum;
-        const rivalNum = num % 2 === 0 ? num - 1 : num + 1;
-        if (socketMap[rivalNum]) {
-            socketMap[rivalNum].emit('leave');
-        }
-        delete socketMap[socket.clientNum];
-    });
-});
-
-const debug = true;
-
-function log(req) {
-    if (debug) {
-        console.log(`ip: ${req.ip}     route: ${req.path}`);
-        console.log(req.body);
-    }
-}
+// socket 绑定server
+socket.bindServer(server);
