@@ -5,7 +5,8 @@ import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import './base.scss';
 import TetrisPage from './tetris/js/tetris';
 import XHRPage from './xhr/page';
-import CssPage from './h5/css';
+import BfcPage from './h5/bfc/bfc';
+import Layout from './h5/layout/layout';
 import WidgetsPage from './widgets/widgets';
 
 function Home() {
@@ -13,8 +14,9 @@ function Home() {
         <ul>
             <li><Link to="/tetris">火拼俄罗斯方块</Link></li>
             <li><Link to="/xhr">xhr</Link></li>
-            <li><Link to="/cssdemo">cssdemo</Link></li>
             <li><Link to="/widgets">widgets</Link></li>
+            <li><Link to="/bfc">bfc</Link></li>
+            <li><Link to="/layout">layout</Link></li>
         </ul>
     );
 }
@@ -26,8 +28,9 @@ ReactDom.render((
             <Route exact path='/index' component={Home} />
             <Route exact path='/tetris' component={TetrisPage} />
             <Route exact path='/xhr' component={XHRPage} />
-            <Route exact path='/cssdemo' component={CssPage} />
+            <Route exact path='/bfc' component={BfcPage} />
             <Route exact path='/widgets' component={WidgetsPage} />
+            <Route exact path='/layout' component={Layout} />
         </Switch>
     </BrowserRouter>
 ), document.getElementById('page-frame-point'));
