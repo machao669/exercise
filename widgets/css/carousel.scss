@@ -17,9 +17,13 @@
         position: absolute;
     }
 
-    .item img {
-        width: 100%;
-    }
+    .item {
+        background: grey;
+
+        img {
+            width: 100%;
+        }
+    } 
 
     .btn {
         position: absolute;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './css.scss';
+import './bfc.scss';
 
-export default class CssPage extends Component {
+export default class BfcPage extends Component {
     constructor(props) {
         super(props);
         this.state = {};
