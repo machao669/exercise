@@ -1,0 +1,88 @@
+
+#layout {
+
+    .layout > div {
+        height: 98px;
+    }
+
+    article {
+        height: 100px;
+        min-width: 605px;
+        border: 1px solid blue;
+    }
+
+    .center {
+        background: greenyellow;
+    }
+
+    .left,
+    .right {
+        width: 300px;
+    }
+
+    .left {
+        background: palevioletred;
+    }
+
+    .right {
+        background: skyblue;
+    }
+
+    .float {
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+    }
+
+    .absolute {
+        position: relative;
+
+        .left {
+            position: absolute;
+            left: 0;
+        }
+
+        .right {
+            position: absolute;
+            right: 0;
+        }
+
+        .center {
+            position: absolute;
+            left: 300px;
+            right: 300px;
+        }
+    }
+
+    .flex {
+        display: flex;
+
+        .left,
+        .right {
+            flex: 0 0 300px;
+        }
+
+        .center {
+            flex: 1;
+        }
+    }
+
+    .table {
+        display: table;
+        width: 100%;
+
+        > div {
+            display: table-cell;
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 300px auto 300px;
+        grid-template-rows: 98px;
+    }
+}

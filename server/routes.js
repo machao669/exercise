@@ -11,9 +11,11 @@ const routes = [
     }, {
         url: '/xhr',
     }, {
-        url: '/cssdemo',
+        url: '/bfc',
     }, {
         url: '/widgets',
+    }, {
+        url: '/layout',
     },
 ];
 
