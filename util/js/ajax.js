@@ -18,7 +18,7 @@ class XHR {
         this.method = method;
         this.options = this.createOptions(options);
         this.url = url;
-        this.xmlhttp = new XMLHttpRequest();
+        this.xmlhttp = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
         this.promise = new QPromise(this.bindPromise.bind(this));
     }
 
