@@ -1,0 +1,25 @@
+.grid {
+    display: flex;
+    width: 300px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .box {
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        border: 4px solid gray;
+        margin-left: -4px;
+        margin-top: -4px;
+        cursor: pointer;
+
+        &:hover {
+            border: 4px solid red;
+            z-index: 2;
+        }
+    }
+}

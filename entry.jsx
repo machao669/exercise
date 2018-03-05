@@ -8,6 +8,7 @@ import XHRPage from './xhr/page';
 import BfcPage from './h5/bfc/bfc';
 import Layout from './h5/layout/layout';
 import WidgetsPage from './widgets/widgets';
+import Grid9 from './h5/layout/grid9';
 
 function Home() {
     return (
@@ -17,6 +18,7 @@ function Home() {
             <li><Link to="/widgets">widgets</Link></li>
             <li><Link to="/bfc">bfc</Link></li>
             <li><Link to="/layout">layout</Link></li>
+            <li><Link to="/grid9">九宫格</Link></li>
         </ul>
     );
 }
@@ -31,6 +33,7 @@ ReactDom.render((
             <Route exact path='/bfc' component={BfcPage} />
             <Route exact path='/widgets' component={WidgetsPage} />
             <Route exact path='/layout' component={Layout} />
+            <Route exact path='/grid9' component={Grid9} />
         </Switch>
     </BrowserRouter>
 ), document.getElementById('page-frame-point'));

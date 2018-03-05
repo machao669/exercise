@@ -16,6 +16,8 @@ const routes = [
         url: '/widgets',
     }, {
         url: '/layout',
+    }, {
+        url: '/grid9',
     },
 ];
 
