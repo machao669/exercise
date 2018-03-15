@@ -144,7 +144,7 @@ function fetchOverlap(str) {
  *      const b = Math.round(Math.randow());
  *      return a + b;
  * }
- * 
+ *
  * function dispatch(result) {
  *      if (result === "00") {
  *         action1();
@@ -156,8 +156,7 @@ function fetchOverlap(str) {
  *          dispatch(throwCoin());
  *      }
  * }
- * 
+ *
  * dispatch(throwCoin());
- * 
+ *
  */
-    
