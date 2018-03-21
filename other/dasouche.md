@@ -10,6 +10,8 @@ a. content-box  b. border-box  c. 以上都不对
 
 3. 用一行代码让var domList = document.queryAll('div');中的domList返回真正的数组
 
+4. 一行代码随机打乱数组
+
 #### part 2 思考题
 1. 写成认为最好的目录分配方式，并说明原因
 
